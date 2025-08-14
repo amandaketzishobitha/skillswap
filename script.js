@@ -1,11 +1,20 @@
+import { createProfileCard } from './profileCard.js';
+import greet, { add, multiply } from './mathUtils.js';
+import { handleContactForm } from './contactForm.js';
+
+// Run greet() and log math results
+greet();
+console.log("Add:", add(2, 3));
+console.log("Multiply:", multiply(4, 5));
+
 // Welcome alert (only on home page)
-if (document.title.includes("SkillSwap India") && !document.title.includes("Contact")) {
+if (document.title === "SkillSwap India") {
     window.onload = function() {
         alert("Welcome to SkillSwap India!");
     };
 }
 
-// Change background color (only if button exists)
+// Change background color
 const colorBtn = document.getElementById("colorBtn");
 if (colorBtn) {
     colorBtn.addEventListener("click", function() {
@@ -14,7 +23,7 @@ if (colorBtn) {
     });
 }
 
-// Skill Form (Home Page)
+// Skill Form
 const skillForm = document.getElementById("skillForm");
 if (skillForm) {
     skillForm.addEventListener("submit", function(e) {
@@ -42,22 +51,45 @@ if (skillForm) {
     });
 }
 
-// Contact Form (Contact Page)
-const contactForm = document.getElementById("contactForm");
-if (contactForm) {
-    contactForm.addEventListener("submit", function(e) {
-        e.preventDefault();
+// Mini Activity - Create/Delete Cards
+const createCardBtn = document.getElementById("createCardBtn");
+const cardContainer = document.getElementById("cardContainer");
 
-        let name = document.getElementById("contactName").value.trim();
-        let email = document.getElementById("contactEmail").value.trim();
-        let message = document.getElementById("contactMessage").value.trim();
+if (createCardBtn) {
+    createCardBtn.addEventListener("click", () => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.textContent = "I am a dynamic card";
 
-        if (!name || !email || !message) {
-            alert("Please fill in all fields before submitting!");
-            return;
-        }
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.addEventListener("click", () => {
+            card.remove();
+        });
 
-        document.getElementById("thankYouMessage").style.display = "block";
-        contactForm.reset();
+        card.appendChild(deleteBtn);
+        cardContainer.appendChild(card);
     });
 }
+
+// Practical Activity - Profile Cards
+if (document.title === "SkillSwap India") {
+    const addProfileBtn = document.createElement("button");
+    addProfileBtn.textContent = "Add Profile";
+    document.querySelector("main").prepend(addProfileBtn);
+
+    const profilesContainer = document.createElement("div");
+    profilesContainer.id = "profilesContainer";
+    document.querySelector("main").appendChild(profilesContainer);
+
+    addProfileBtn.addEventListener("click", () => {
+        const name = prompt("Enter name:");
+        const role = prompt("Enter role:");
+        if (name && role) {
+            profilesContainer.appendChild(createProfileCard(name, role));
+        }
+    });
+}
+
+// Contact Form Handler
+handleContactForm();
